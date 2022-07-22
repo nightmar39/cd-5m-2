@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: trio-dev
+  labels:
+    app: trio-dev
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: trio-dev
+    name: arn-aws-eks-us-east-2-835357571861-cluster-us-support-v2-clus
+  source:
+    repoURL: https://github.com/nightmar39/cd-five-mins.git
+    targetRevision: main
+    path: ./k8s-resources/trio/dev
+    helm:
+      parameters:
+        - name: buildID
+          value: argocd
+      valueFiles:
+        - values.yaml
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true

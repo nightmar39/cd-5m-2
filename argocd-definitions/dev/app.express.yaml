@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: express-dev
+  labels:
+    app: express-dev
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: express-dev
+    name: arn-aws-eks-us-east-2-835357571861-cluster-us-support-v2-clus
+  source:
+    path: ./k8s-resources/express/overlays/dev
+    repoURL: https://github.com/nightmar39/cd-five-mins.git
+    targetRevision: main
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true

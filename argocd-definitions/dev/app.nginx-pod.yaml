@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-pod-dev
+  labels:
+    app: nginx-pod-dev
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: nginx-pod-dev
+    name: arn-aws-eks-us-east-2-835357571861-cluster-us-support-v2-clus
+  source:
+    repoURL: https://github.com/nightmar39/cd-five-mins.git
+    targetRevision: main
+    path: ./k8s-resources/nginx-pod/dev
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
